@@ -3,11 +3,13 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url "https://www.jitpack.io"}
+        jcenter()
     }
     resolutionStrategy {
         eachPlugin {
             if( requested.id.id == 'dagger.hilt.android.plugin') {
-                useModule("com.google.dagger:hilt-android-gradle-plugin:2.40")
+                useModule("com.google.dagger:hilt-android-gradle-plugin:2.42")
             }
         }
     }
@@ -17,6 +19,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://www.jitpack.io"}
+        jcenter()
     }
 }
 rootProject.name = "News App Test"

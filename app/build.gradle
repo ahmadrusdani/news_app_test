@@ -6,6 +6,11 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def keyProperties = new Properties()
+def keyPropertiesFile = rootProject.file('key.properties')
+if (keyPropertiesFile.exists()) {
+    keyProperties.load(new FileInputStream(keyPropertiesFile))
+}
 android {
     namespace 'com.amd.newsapptest'
     compileSdk 32
@@ -18,6 +23,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "base_url", "${keyProperties['base_url']}"
+        resValue("string", "base_url", "${keyProperties['base_url']}")
     }
 
     buildTypes {
@@ -33,21 +41,26 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //di
-    def hilt_version ="2.40"
+    def hilt_version ="2.42"
     implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "androidx.hilt:hilt-compiler:1.0.0-alpha02"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptTest "com.google.dagger:hilt-compiler:$hilt_version"
@@ -63,14 +76,15 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp"
 
     //coroutines
-    def coroutines_version = "1.3.9"
+    def coroutines_version = "1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
     //lifecycle
-    def lifecycle_version = "2.3.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    def lifecycle_version = "2.4.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     //activity
     def activity_version = "1.4.0"
@@ -79,4 +93,12 @@ dependencies {
     //fragment
     def fragment_version = "1.4.1"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    //glide
+    def glide_version = "4.11.0"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    //pageIndicatorView
+    implementation 'com.romandanylyk:pageindicatorview:1.0.2@aar'
 }
